@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #app{
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      background-image: url(1.png);
+      background-repeat: no-repeat;
+    }
+   .Search{
+     width:250px;
+     height: 50px;
+   }
+   button{
+     height: 50px;
+     border: 1px solid green;
+   }
+   button:active{
+     background-color: #666;
+   }
+   a{
+    font-size: 30px;
+    
+     border-radius: 10%;
+     color:black;
+     background-color: pink;
+    border: 1px solid blue;
+   }
+   ul{
+     color:blanchedalmond;
+     font-size: 25px;
+   }
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="d1">
+        <input class="Search"
+          type="text"
+          placeholder="请输入查询的天气"
+          @keyup.enter="searchWeather"
+          v-model="city"
+        />
+        <button @click="searchWeather">search</button>
+      </div>
+      <div class="d2">
+        <a href="javascript:;" @click="changeCity('北京')">北京</a>
+        <a href="javascript:;" @click="changeCity('上海')">上海</a>
+        <a href="javascript:;" @click="changeCity('深圳')">深圳</a>
+        <a href="javascript:;" @click="changeCity('广州')">广州</a>
+        <a href="javascript:;" @click="changeCity('西安')">西安</a>
+        <br>
+        <a href="javascript:;" @click="changeCity('武汉')">武汉</a>
+        <a href="javascript:;" @click="changeCity('南京')">南京</a>
+        <a href="javascript:;" @click="changeCity('杭州')">杭州</a>
+        <a href="javascript:;" @click="changeCity('咸阳')">咸阳</a>
+        <a href="javascript:;" @click="changeCity('宁波')">宁波</a>
+      </div>
+      <ul>
+        <li v-for="item in weatherList" style="float: left;">
+          <div><span>{{item.type}}</span></div>
+          <div>
+            <b>{{item.low}}</b>
+            <b>{{item.high}}</b>
+          </div>
+          <div><span>{{item.date}}</span></div>
+        </li>
+      </ul>
+</div>
+<script>
+var vm=new Vue({
+  el:"#app",
+  data:{
+    city:"",
+    weatherList:[]
+  },
+  methods:{
+      searchWeather(){
+          var that=this;
+          axios.get("http://wthrcdn.etouch.cn/weather_mini?city="+this.city).then(function(response){
+              that.weatherList=response.data.data.forecast;
+          }).catch(function(err){
+              console.log(err);
+          })
+      },
+      changeCity(city){
+          this.city=city;
+          this.searchWeather();
+         
+      }
+  }
+})
+</script>
+</body>
+</html>
